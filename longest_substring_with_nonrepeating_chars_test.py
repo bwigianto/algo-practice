@@ -1,42 +1,32 @@
 import unittest
-from collections import Counter
 
 class LongestSubstringWithNonrepeatingChars(unittest.TestCase):
 
-    def unique(self, s):
-        maxel = max(Counter(s).iteritems(), key=lambda x: x[1])
-        return maxel[1] == 1
-
     def longest(self, s):
-        maxs = ''
+        seen = {}
         maxlen = 0
+        j = 0
         for i in xrange(len(s)):
-            for j in xrange(i+1, len(s) + 1):
-                if self.unique(s[i:j]):
-                    if j-i > maxlen:
-                        maxlen = j-i
-                        maxs = s[i:j]
-                else:
-                    continue
-        return maxs
+            if s[i] in seen:
+                j = max(j, seen[s[i]] + 1)
+            seen[s[i]] = i
+            maxlen = max(i - j + 1, maxlen)
+        return maxlen
 
     def test_unique_string_returns_itself(self):
-        self.assertEqual(self.longest('abc'), 'abc')
+        self.assertEqual(self.longest('abc'), 3)
 
     def test_finds_substring(self):
-        self.assertEqual(self.longest('abcabcbb'), 'abc')
+        self.assertEqual(self.longest('abcabcbb'), 3)
 
     def test_finds_substring2(self):
-        self.assertEqual(self.longest('bbbbb'), 'b')
+        self.assertEqual(self.longest('bbbbb'), 1)
 
     def test_finds_substring3(self):
-        self.assertEqual(self.longest('pwwkew'), 'wke')
+        self.assertEqual(self.longest('pwwkew'), 3)
 
-    def test_unique(self):
-        self.assertTrue(self.unique('abc'))
-
-    def test_unique2(self):
-        self.assertFalse(self.unique('abcb'))
+    def test_finds_substring4(self):
+        self.assertEqual(self.longest("iulyqqziheiztnagxszqaovtsydaennoibmyrniatq"), 10)
 
 if __name__ == '__main__':
     unittest.main()
