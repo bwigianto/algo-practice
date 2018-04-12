@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python -m unittest discover . "*test.py"
+python -m unittest discover problems "*test.py"
